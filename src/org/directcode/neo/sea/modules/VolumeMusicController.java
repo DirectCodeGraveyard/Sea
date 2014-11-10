@@ -31,6 +31,8 @@ public class VolumeMusicController extends SeaModule {
     public void load(Sea sea) {
         this.sea = sea;
 
+        SeaLog.info("Loading Volume Music Controller");
+
         displayManager = (DisplayManager) sea.getSystemService(Context.DISPLAY_SERVICE);
         volumeReceiver = new VolumeButtonReceiver();
         audioManager = (AudioManager) sea.getSystemService(Context.AUDIO_SERVICE);
@@ -71,17 +73,20 @@ public class VolumeMusicController extends SeaModule {
     }
 
     private void activateController() {
+        SeaLog.info("Activating Volume Music Controller");
         IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         sea.getContext().registerReceiver(volumeReceiver, filter);
     }
 
     private void deactivateController() {
+        SeaLog.info("Deactivating Volume Music Controller");
         sea.getContext().unregisterReceiver(volumeReceiver);
     }
 
     @Override
     public void unload(Sea sea) {
+        SeaLog.info("Unloading Volume Music Controller");
         deactivateController();
         displayManager.unregisterDisplayListener(displayListener);
     }
