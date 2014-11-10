@@ -16,7 +16,6 @@ public class SeaService extends Service {
     public void onCreate() {
         sea = new Sea(this);
         SeaUtils.applyModules(sea);
-
     }
 
     @Override
@@ -27,6 +26,7 @@ public class SeaService extends Service {
 
     @Override
     public void onDestroy() {
+        sea.unloadAll();
     }
 
     @Override
