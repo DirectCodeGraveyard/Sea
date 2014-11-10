@@ -24,7 +24,7 @@ public class SeaService extends Service {
         SeaLog.info("SeaService Starting");
         sea.loadAll();
         SeaLog.info("SeaService Started");
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
