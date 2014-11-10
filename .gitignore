@@ -1,0 +1,7 @@
+*.apk
+build
+*.iml
+.idea
+*.ipr
+*.class
+.gradle
