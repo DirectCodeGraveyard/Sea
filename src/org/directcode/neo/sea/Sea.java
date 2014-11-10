@@ -35,7 +35,7 @@ public class Sea {
     public void load(String name) {
         SeaModule module = getModuleByName(name);
         if (isLoaded(name)) {
-            throw new RuntimeException("Module already loaded!");
+            throw new RuntimeException("Module already loadedModules!");
         } else {
             module.load(this);
             loadedModules.add(module);
@@ -49,7 +49,7 @@ public class Sea {
     public void unload(String name) {
         SeaModule module = getModuleByName(name);
         if (!isLoaded(name)) {
-            throw new RuntimeException("Module not loaded!");
+            throw new RuntimeException("Module not loadedModules!");
         } else {
             module.unload(this);
             loadedModules.remove(module);
@@ -97,5 +97,21 @@ public class Sea {
 
     public Context getContext() {
         return getSeaService().getApplicationContext();
+    }
+
+    public List<String> getLoadedModules() {
+        List<String> names = new ArrayList<>();
+        for (SeaModule module : loadedModules) {
+            names.add(module.name());
+        }
+        return names;
+    }
+
+    public List<String> getModules() {
+        List<String> names = new ArrayList<>();
+        for (SeaModule module : modules) {
+            names.add(module.name());
+        }
+        return names;
     }
 }

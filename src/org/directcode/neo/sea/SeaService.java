@@ -3,13 +3,16 @@ package org.directcode.neo.sea;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
+
+import java.util.List;
 
 public class SeaService extends Service {
     private Sea sea;
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
     @Override
@@ -38,4 +41,32 @@ public class SeaService extends Service {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
     }
+
+    private final SeaController.Stub binder = new SeaController.Stub() {
+
+        @Override
+        public boolean isLoaded(String name) throws RemoteException {
+            return sea.isLoaded(name);
+        }
+
+        @Override
+        public void load(String name) throws RemoteException {
+            sea.load(name);
+        }
+
+        @Override
+        public void unload(String name) throws RemoteException {
+            sea.unload(name);
+        }
+
+        @Override
+        public List<String> loadedModules() throws RemoteException {
+            return sea.getLoadedModules();
+        }
+
+        @Override
+        public List<String> modules() throws RemoteException {
+            return sea.getModules();
+        }
+    };
 }
