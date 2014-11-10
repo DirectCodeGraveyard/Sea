@@ -14,19 +14,24 @@ public class SeaService extends Service {
 
     @Override
     public void onCreate() {
+        SeaLog.info("SeaService Created");
         sea = new Sea(this);
         SeaUtils.applyModules(sea);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        SeaLog.info("SeaService Starting");
         sea.loadAll();
+        SeaLog.info("SeaService Started");
         return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        SeaLog.info("SeaService Stopping");
         sea.unloadAll();
+        SeaLog.info("SeaService Stopped");
     }
 
     @Override

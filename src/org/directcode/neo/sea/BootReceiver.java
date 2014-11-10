@@ -8,6 +8,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        SeaLog.info("Boot Completed");
         context.startService(new Intent(context, SeaService.class));
     }
 }
