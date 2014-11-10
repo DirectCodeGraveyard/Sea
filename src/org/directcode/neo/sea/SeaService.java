@@ -25,7 +25,8 @@ public class SeaService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         SeaLog.info("SeaService Starting");
-        sea.loadAll();
+        Intent readyIntent = new Intent("org.directcode.neo.sea.READY");
+        sendBroadcast(readyIntent);
         SeaLog.info("SeaService Started");
         return START_STICKY;
     }

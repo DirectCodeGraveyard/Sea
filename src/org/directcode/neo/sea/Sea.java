@@ -2,6 +2,7 @@ package org.directcode.neo.sea;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
 
@@ -39,6 +40,10 @@ public class Sea {
         } else {
             module.load(this);
             loadedModules.add(module);
+
+            Intent loadedIntent = new Intent("org.directcode.neo.sea.MODULE_LOADED");
+            loadedIntent.putExtra("module", name);
+            getContext().sendBroadcast(loadedIntent);
         }
     }
 
@@ -53,6 +58,9 @@ public class Sea {
         } else {
             module.unload(this);
             loadedModules.remove(module);
+            Intent unloadedIntent = new Intent("org.directcode.neo.sea.MODULE_UNLOADED");
+            unloadedIntent.putExtra("module", name);
+            getContext().sendBroadcast(unloadedIntent);
         }
     }
 
