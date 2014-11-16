@@ -28,4 +28,14 @@ public class AutoLoadManager {
         }
         preferences.edit().putStringSet("modules.autoloaded", autoLoadedModules).apply();
     }
+
+    public void load(Sea sea) {
+        Set<String> autoLoadedModules = preferences.getStringSet("modules.autoloaded", new HashSet<String>());
+
+        for (String name : autoLoadedModules) {
+            if (!sea.isLoaded(name)) {
+                sea.load(name);
+            }
+        }
+    }
 }

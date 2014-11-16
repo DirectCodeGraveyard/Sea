@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SeaService extends Service {
     private Sea sea;
+    private AutoLoadManager autoLoadManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -20,6 +21,7 @@ public class SeaService extends Service {
         SeaLog.info("SeaService Created");
         sea = new Sea(this);
         SeaUtils.applyModules(sea);
+        autoLoadManager = new AutoLoadManager(this);
     }
 
     @Override
@@ -28,6 +30,10 @@ public class SeaService extends Service {
         Intent readyIntent = new Intent("org.directcode.neo.sea.READY");
         sendBroadcast(readyIntent);
         SeaLog.info("SeaService Started");
+        SeaLog.info("AutoLoading Modules");
+
+        autoLoadManager.load(sea);
+
         return START_STICKY;
     }
 
@@ -68,6 +74,16 @@ public class SeaService extends Service {
         @Override
         public List<String> modules() throws RemoteException {
             return sea.getModules();
+        }
+
+        @Override
+        public boolean isAutoLoaded(String name) throws RemoteException {
+            return autoLoadManager.isAutoLoaded(name);
+        }
+
+        @Override
+        public void setAutoLoaded(String name, boolean autoLoaded) throws RemoteException {
+            autoLoadManager.setAutoLoaded(name, autoLoaded);
         }
     };
 }
