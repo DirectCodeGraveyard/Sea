@@ -21,6 +21,7 @@ public class VolumeMusicController extends SeaModule {
     private DisplayManager.DisplayListener displayListener;
     private VolumeButtonReceiver volumeReceiver;
     private AudioManager audioManager;
+    private boolean enabled = false;
 
     @Override
     public String name() {
@@ -37,7 +38,7 @@ public class VolumeMusicController extends SeaModule {
         volumeReceiver = new VolumeButtonReceiver();
         audioManager = (AudioManager) sea.getSystemService(Context.AUDIO_SERVICE);
 
-        Display[] displays = displayManager.getDisplays(DisplayManager.DISPLAY_CATEGORY_PRESENTATION);
+        Display[] displays = displayManager.getDisplays();
 
         if (displays.length == 0) {
             SeaLog.warn("Volume Music Controller: No Displays Found");
@@ -77,23 +78,32 @@ public class VolumeMusicController extends SeaModule {
         IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         sea.getContext().registerReceiver(volumeReceiver, filter);
+        enabled = true;
     }
 
     private void deactivateController() {
         SeaLog.info("Deactivating Volume Music Controller");
         sea.getContext().unregisterReceiver(volumeReceiver);
+        enabled = false;
     }
 
     @Override
     public void unload(Sea sea) {
         SeaLog.info("Unloading Volume Music Controller");
-        deactivateController();
-        displayManager.unregisterDisplayListener(displayListener);
+
+        if (enabled) {
+            deactivateController();
+        }
+
+        if (displayListener != null) {
+            displayManager.unregisterDisplayListener(displayListener);
+        }
     }
 
     public class VolumeButtonReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            SeaLog.info("Volume Button Receiver - Got Something");
             if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
                 KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
 
@@ -101,6 +111,7 @@ public class VolumeMusicController extends SeaModule {
                         (KeyEvent.KEYCODE_VOLUME_UP == event.getKeyCode() ||
                                 KeyEvent.KEYCODE_VOLUME_DOWN == event.getKeyCode())) ||
                         event.isLongPress()) {
+                    SeaLog.info("Got Volume Key Press: Delegating to default action.");
                     return;
                 }
 

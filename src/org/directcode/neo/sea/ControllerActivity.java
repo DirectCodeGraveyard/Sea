@@ -11,15 +11,20 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class ControllerActivity extends Activity {
     private SeaController controller;
+    private ServiceConnection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +32,7 @@ public class ControllerActivity extends Activity {
 
         final ProgressDialog loadingDialog = ProgressDialog.show(this, "Connecting...", "Controller is connecting to the Sea Service.");
 
-        bindService(new Intent(getApplicationContext(), SeaService.class), new ServiceConnection() {
+        connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 loadingDialog.hide();
@@ -54,7 +59,9 @@ public class ControllerActivity extends Activity {
 
                 dialog.show();
             }
-        }, BIND_AUTO_CREATE);
+        };
+
+        bindService(new Intent(getApplicationContext(), SeaService.class), connection, BIND_AUTO_CREATE);
 
         loadingDialog.show();
 
@@ -62,7 +69,9 @@ public class ControllerActivity extends Activity {
     }
 
     private void init() {
-        ListView listView = (ListView) findViewById(R.id.moduleCheckboxes);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.controller_layout);
+
+        ScrollView view = new ScrollView(this);
 
         try {
             final List<String> modules = controller.modules();
@@ -93,11 +102,18 @@ public class ControllerActivity extends Activity {
                     }
                 });
 
-                listView.addView(box);
+                view.addView(box);
             }
 
         } catch (Exception e) {
             SeaLog.error("Failed to initialize controller!", e);
         }
+
+        layout.addView(view);
+    }
+
+    @Override
+    public void onDestroy() {
+        unbindService(connection);
     }
 }

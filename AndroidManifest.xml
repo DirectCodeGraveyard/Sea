@@ -7,11 +7,17 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
+        android:name=".SeaApplication"
         android:label="@string/app_name"
         android:icon="@android:drawable/ic_menu_more"
         android:allowBackup="true">
 
-        <activity android:name=".ControllerActivity" android:enabled="true" android:label="Sea Controller"/>
+        <activity android:exported="true" android:name=".ControllerActivity" android:enabled="true" android:label="Sea Controller">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <service android:name=".SeaService" android:enabled="true" />
 

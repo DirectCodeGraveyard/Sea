@@ -6,4 +6,6 @@ interface SeaController {
     void unload(String name);
     List<String> loadedModules();
     List<String> modules();
+    boolean isAutoLoaded(String name);
+    void setAutoLoaded(String name, boolean autoLoaded);
 }
