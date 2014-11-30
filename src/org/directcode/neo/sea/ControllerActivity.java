@@ -114,6 +114,7 @@ public class ControllerActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         unbindService(connection);
     }
 }
