@@ -18,7 +18,7 @@ public class SeaService extends Service {
 
     @Override
     public void onCreate() {
-        SeaLog.info("SeaService Created");
+        SeaLog.info("Created");
         sea = new Sea(this);
         SeaUtils.applyModules(sea);
         autoLoadManager = new AutoLoadManager(this);
@@ -26,11 +26,11 @@ public class SeaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SeaLog.info("SeaService Starting");
+        SeaLog.info("Starting");
         Intent readyIntent = new Intent("org.directcode.neo.sea.READY");
         sendBroadcast(readyIntent);
-        SeaLog.info("SeaService Started");
-        SeaLog.info("AutoLoading Modules");
+        SeaLog.info("Started");
+        SeaLog.info("Autoloading Modules");
 
         autoLoadManager.load(sea);
 
@@ -39,9 +39,9 @@ public class SeaService extends Service {
 
     @Override
     public void onDestroy() {
-        SeaLog.info("SeaService Stopping");
+        SeaLog.info("Stopping");
         sea.unloadAll();
-        SeaLog.info("SeaService Stopped");
+        SeaLog.info("Stopped");
     }
 
     @Override
