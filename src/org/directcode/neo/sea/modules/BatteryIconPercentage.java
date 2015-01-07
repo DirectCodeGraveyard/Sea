@@ -38,13 +38,6 @@ public class BatteryIconPercentage extends SeaModule {
     @Override
     public void unload(Sea sea) {
         unloading = true;
-        try {
-            if (proxy.getBatteryIconPercentage()) {
-                proxy.setBatteryIconPercentage(false);
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
         sea.getContext().unbindService(connection);
     }
 
@@ -53,14 +46,6 @@ public class BatteryIconPercentage extends SeaModule {
         public void onServiceConnected(ComponentName name, IBinder service) {
             proxy = SystemUIProxy.Stub.asInterface(service);
             SeaLog.info(name() + " has connected to the SystemUI Proxy");
-
-            try {
-                if (!proxy.getBatteryIconPercentage()) {
-                    proxy.setBatteryIconPercentage(true);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
