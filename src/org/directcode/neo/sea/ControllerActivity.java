@@ -77,7 +77,7 @@ public class ControllerActivity extends Activity {
                     }
                 });
             }
-        }, 0, 5000);
+        }, 5000, 5000);
     }
 
     private void reload() {
