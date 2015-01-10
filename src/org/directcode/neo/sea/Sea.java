@@ -1,44 +1,90 @@
 package org.directcode.neo.sea;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.display.DisplayManager;
-import android.os.Handler;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Sea {
-    private static final String TAG = "Sea";
+    public static final String TAG = "Sea";
+    public static final String PERMISSION_PROVIDE_MODULE = "org.directcode.neo.sea.PROVIDE_MODULE";
+    public static final String METADATA_SERVICE_CLASS = "org.directcode.neo.sea.SERVICE_CLASS";
+
+    private final RemoteModuleRegistry rmr;
 
     private final SeaService service;
-    private final List<SeaModule> modules;
-    private final Set<SeaModule> loadedModules;
+    private final List<Module> modules;
+    private final Set<Module> loadedModules;
+    private final SharedPreferences.OnSharedPreferenceChangeListener rmrChangeListener;
+    private final Map<String, RemoteModule> remoteModules = new HashMap<>();
 
     public Sea(SeaService service) {
         this.service = service;
         this.modules = new ArrayList<>();
         this.loadedModules = new HashSet<>();
+        this.rmr = new RemoteModuleRegistry(getContext());
+        this.rmrChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals("modules")) {
+                    Set<String> m = rmr.getRemoteModules();
+                    Set<String> un = new HashSet<>();
+                    for (String k : remoteModules.keySet()) {
+                        if (!m.contains(k)) {
+                            String pkg = k.substring(0, k.indexOf("@") - 1);
+                            String clazz = k.substring(pkg.length());
+                            unload(remoteModules.get(clazz));
+                            un.add(k);
+                        }
+                    }
+
+                    for (String u : un) {
+                        remoteModules.remove(u);
+                    }
+
+                    for (String module : m) {
+                        if (remoteModules.containsKey(module)) {
+                            continue;
+                        }
+
+                        int l = module.indexOf("@");
+                        String pkg = module.substring(0, l - 1);
+                        String clazz = module.substring(pkg.length());
+                        RemoteModule rm = new RemoteModule(Sea.this, pkg, clazz);
+                        remoteModules.put(module, rm);
+                        addModule(rm);
+                    }
+                }
+            }
+        };
+
+        rmr.getPrefs().registerOnSharedPreferenceChangeListener(rmrChangeListener);
     }
 
     /**
      * Load all modules
      */
     public void loadAll() {
-        for (SeaModule module : modules) {
+        for (Module module : modules) {
             load(module);
         }
     }
 
     public void load(String name) {
-        SeaModule module = getModuleByName(name);
+        Module module = getModuleByName(name);
         if (isLoaded(name)) {
-            throw new RuntimeException("Module already loadedModules!");
+            throw new RuntimeException("Module already loaded!");
         } else {
-            module.load(this);
+            if (module instanceof LocalModule) {
+                ((LocalModule) module).sea = this;
+            }
+            module.load();
             loadedModules.add(module);
 
             Intent loadedIntent = new Intent("org.directcode.neo.sea.MODULE_LOADED");
@@ -47,16 +93,16 @@ public class Sea {
         }
     }
 
-    private void unload(SeaModule module) {
+    private void unload(Module module) {
         unload(module.name());
     }
 
     public void unload(String name) {
-        SeaModule module = getModuleByName(name);
+        Module module = getModuleByName(name);
         if (!isLoaded(name)) {
-            throw new RuntimeException("Module not loadedModules!");
+            throw new RuntimeException("Module not loaded!");
         } else {
-            module.unload(this);
+            module.unload();
             loadedModules.remove(module);
             Intent unloadedIntent = new Intent("org.directcode.neo.sea.MODULE_UNLOADED");
             unloadedIntent.putExtra("module", name);
@@ -64,7 +110,7 @@ public class Sea {
         }
     }
 
-    private void load(SeaModule module) {
+    private void load(Module module) {
         load(module.name());
     }
 
@@ -72,8 +118,8 @@ public class Sea {
         return loadedModules.contains(getModuleByName(name));
     }
 
-    public SeaModule getModuleByName(String name) {
-        for (SeaModule module : modules) {
+    public Module getModuleByName(String name) {
+        for (Module module : modules) {
             if (module.name().equals(name)) {
                 return module;
             }
@@ -86,12 +132,12 @@ public class Sea {
      * Unload all modules
      */
     public void unloadAll() {
-        for (SeaModule module : loadedModules) {
+        for (Module module : loadedModules) {
             unload(module);
         }
     }
 
-    public void addModule(SeaModule module) {
+    public void addModule(Module module) {
         modules.add(module);
     }
 
@@ -109,7 +155,7 @@ public class Sea {
 
     public List<String> getLoadedModules() {
         List<String> names = new ArrayList<>();
-        for (SeaModule module : loadedModules) {
+        for (Module module : loadedModules) {
             names.add(module.name());
         }
         return names;
@@ -117,7 +163,7 @@ public class Sea {
 
     public List<String> getModules() {
         List<String> names = new ArrayList<>();
-        for (SeaModule module : modules) {
+        for (Module module : modules) {
             names.add(module.name());
         }
         return names;

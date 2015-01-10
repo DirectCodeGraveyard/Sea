@@ -11,12 +11,10 @@ import android.os.Looper;
 import android.view.Display;
 import android.view.KeyEvent;
 
-import org.directcode.neo.sea.Sea;
+import org.directcode.neo.sea.LocalModule;
 import org.directcode.neo.sea.SeaLog;
-import org.directcode.neo.sea.SeaModule;
 
-public class VolumeMusicController extends SeaModule {
-    private Sea sea;
+public class VolumeMusicController extends LocalModule {
     private DisplayManager displayManager;
     private DisplayManager.DisplayListener displayListener;
     private VolumeButtonReceiver volumeReceiver;
@@ -29,9 +27,7 @@ public class VolumeMusicController extends SeaModule {
     }
 
     @Override
-    public void load(Sea sea) {
-        this.sea = sea;
-
+    public void load() {
         SeaLog.info("Loading Volume Music Controller");
 
         displayManager = (DisplayManager) sea.getSystemService(Context.DISPLAY_SERVICE);
@@ -88,7 +84,7 @@ public class VolumeMusicController extends SeaModule {
     }
 
     @Override
-    public void unload(Sea sea) {
+    public void unload() {
         SeaLog.info("Unloading Volume Music Controller");
 
         if (enabled) {

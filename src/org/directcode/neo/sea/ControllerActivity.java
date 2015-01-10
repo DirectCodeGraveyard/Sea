@@ -10,21 +10,20 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ControllerActivity extends Activity {
     private SeaController controller;
     private ServiceConnection connection;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class ControllerActivity extends Activity {
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 loadingDialog.hide();
                 controller = SeaController.Stub.asInterface(iBinder);
-                init();
+                reload();
             }
 
             @Override
@@ -66,10 +65,24 @@ public class ControllerActivity extends Activity {
         loadingDialog.show();
 
         setContentView(R.layout.controller);
+
+        timer = new Timer("Refresher");
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        reload();
+                    }
+                });
+            }
+        }, 0, 5000);
     }
 
-    private void init() {
+    private void reload() {
         LinearLayout layout = (LinearLayout) findViewById(R.id.controller_layout);
+        layout.removeAllViewsInLayout();
 
         ScrollView view = new ScrollView(this);
 
