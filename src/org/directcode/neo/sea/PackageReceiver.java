@@ -33,6 +33,7 @@ public class PackageReceiver extends BroadcastReceiver {
                 if (meta.containsKey(Sea.METADATA_SERVICE_CLASS)) {
                     String className = meta.getString(Sea.METADATA_SERVICE_CLASS);
                     rmr.addRemoteModule(name, className);
+                    SeaLog.info("Registered Remote Module for " + name + " (" + className + ")");
                 } else {
                     SeaLog.warn("Package " + name + " has permission to provide a remote module, however it does not provide a service class.");
                 }
