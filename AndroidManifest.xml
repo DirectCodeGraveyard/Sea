@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <permission android:name="org.directcode.neo.sea.PROVIDE_MODULE" android:description="@string/perm_provide_module_desc"/>
+    <permission android:name="org.directcode.neo.sea.PROVIDE_MODULE" android:label="@string/perm_provide_module_label" android:description="@string/perm_provide_module_desc"/>
 
     <application
         android:name=".SeaApplication"
