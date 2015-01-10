@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="app_name">Sea</string>
+    <string name="perm_provide_module_desc">Allows Apps to Provide Sea Modules</string>
 </resources>
