@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -28,6 +30,15 @@ public class ControllerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        if (prefs.getBoolean("firstStart", true)) {
+            Intent intent = new Intent(this, FirstRunActivity.class);
+            startActivity(intent);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstStart", false);
+            editor.apply();
+        }
 
         final ProgressDialog loadingDialog = ProgressDialog.show(this, "Connecting...", "Controller is connecting to the Sea Service.");
 

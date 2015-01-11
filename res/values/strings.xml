@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Sea</string>
+
+    <string name="app_name">Sea</string>
     <string name="perm_provide_module_desc">Allows Apps to Provide Sea Modules</string>
     <string name="perm_provide_module_label">Provide Sea Modules</string>
+    <string name="title_activity_first_run">FirstRunActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
