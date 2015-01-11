@@ -1,9 +1,11 @@
-package org.directcode.neo.sea;
+package org.directcode.neo.sea.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import org.directcode.neo.sea.R;
 
 public class FirstRunActivity extends Activity {
 

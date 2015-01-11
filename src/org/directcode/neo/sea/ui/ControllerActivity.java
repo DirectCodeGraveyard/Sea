@@ -1,4 +1,4 @@
-package org.directcode.neo.sea;
+package org.directcode.neo.sea.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -17,6 +17,11 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.directcode.neo.sea.R;
+import org.directcode.neo.sea.SeaController;
+import org.directcode.neo.sea.core.SeaLog;
+import org.directcode.neo.sea.core.SeaService;
 
 import java.util.List;
 import java.util.Timer;

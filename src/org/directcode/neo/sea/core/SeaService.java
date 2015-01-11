@@ -1,9 +1,11 @@
-package org.directcode.neo.sea;
+package org.directcode.neo.sea.core;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+
+import org.directcode.neo.sea.SeaController;
 
 import java.util.List;
 

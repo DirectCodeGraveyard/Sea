@@ -1,4 +1,4 @@
-package org.directcode.neo.sea;
+package org.directcode.neo.sea.core;
 
 import org.directcode.neo.sea.modules.VolumeMusicController;
 

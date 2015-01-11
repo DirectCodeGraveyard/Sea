@@ -1,4 +1,4 @@
-package org.directcode.neo.sea;
+package org.directcode.neo.sea.core;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
