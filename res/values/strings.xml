@@ -4,9 +4,7 @@
     <string name="app_name">Sea</string>
     <string name="perm_provide_module_desc">Allows Apps to Provide Sea Modules</string>
     <string name="perm_provide_module_label">Provide Sea Modules</string>
-    <string name="title_activity_first_run">FirstRunActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_first_run">First Run</string>
     <string name="welcome_title">Welcome to Sea</string>
     <string name="welcome_paragraph">Sea allows you to customize Android to your heart\'s content</string>
     <string name="welcome_button">Let\'s Get Started</string>
