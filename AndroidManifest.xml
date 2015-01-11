@@ -31,7 +31,7 @@
             android:name=".ui.ControllerActivity"
             android:enabled="true"
             android:exported="true"
-            android:label="Sea Controller" >
+            android:label="Sea" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
