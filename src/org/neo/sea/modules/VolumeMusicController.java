@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.modules;
+package org.neo.sea.modules;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.os.Looper;
 import android.view.Display;
 import android.view.KeyEvent;
 
-import org.directcode.neo.sea.core.LocalModule;
-import org.directcode.neo.sea.core.SeaLog;
+import org.neo.sea.core.LocalModule;
+import org.neo.sea.core.SeaLog;
 
 public class VolumeMusicController extends LocalModule {
     private DisplayManager displayManager;

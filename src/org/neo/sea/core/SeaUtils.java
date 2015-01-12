@@ -1,6 +1,6 @@
-package org.directcode.neo.sea.core;
+package org.neo.sea.core;
 
-import org.directcode.neo.sea.modules.VolumeMusicController;
+import org.neo.sea.modules.VolumeMusicController;
 
 public class SeaUtils {
     public static void applyModules(Sea sea) {

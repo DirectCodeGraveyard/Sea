@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.directcode.neo.sea" >
-
-    <uses-sdk
-        android:minSdkVersion="21"
-        android:targetSdkVersion="21" />
+    package="org.neo.sea" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -18,7 +14,7 @@
         android:maxSdkVersion="18" />
 
     <permission
-        android:name="org.directcode.neo.sea.PROVIDE_MODULE"
+        android:name="org.neo.sea.PROVIDE_MODULE"
         android:description="@string/perm_provide_module_desc"
         android:label="@string/perm_provide_module_label" />
 
@@ -28,16 +24,23 @@
         android:icon="@android:drawable/ic_menu_more"
         android:label="@string/app_name" >
         <activity
-            android:name=".ui.ControllerActivity"
+            android:name=".ui.ModuleToggleActivity"
             android:enabled="true"
             android:exported="true"
-            android:label="Sea" >
+            android:label="Sea Module Toggler" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.FirstRunActivity"
+            android:label="@string/title_activity_first_run"
+            android:theme="@android:style/Theme.Material.NoActionBar">
+        </activity>
+
+        <activity android:name=".ui.RuleManagerActivity" android:label="Sea Rule Manager" android:theme="@android:style/Theme.Material" />
 
         <service
             android:name=".core.SeaService"
@@ -51,6 +54,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".core.PackageReceiver"
             android:enabled="true"
@@ -61,12 +65,6 @@
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".ui.FirstRunActivity"
-            android:label="@string/title_activity_first_run"
-            android:theme="@android:style/Theme.Material.NoActionBar">
-        </activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.ui;
+package org.neo.sea.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -18,16 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.directcode.neo.sea.R;
-import org.directcode.neo.sea.SeaController;
-import org.directcode.neo.sea.core.SeaLog;
-import org.directcode.neo.sea.core.SeaService;
+import org.neo.sea.core.SeaLog;
+import org.neo.sea.core.SeaService;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ControllerActivity extends Activity {
+public class ModuleToggleActivity extends Activity {
     private SeaController controller;
     private ServiceConnection connection;
     private Timer timer;
@@ -80,7 +78,7 @@ public class ControllerActivity extends Activity {
 
         loadingDialog.show();
 
-        setContentView(R.layout.controller);
+        setContentView(R.layout.module_toggle);
 
         timer = new Timer("Refresher");
         timer.scheduleAtFixedRate(new TimerTask() {

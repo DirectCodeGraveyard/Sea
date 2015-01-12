@@ -1,11 +1,9 @@
-package org.directcode.neo.sea.core;
+package org.neo.sea.core;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-
-import org.directcode.neo.sea.SeaController;
 
 import java.util.List;
 
@@ -44,11 +42,6 @@ public class SeaService extends Service {
         SeaLog.info("Stopping");
         sea.unloadAll();
         SeaLog.info("Stopped");
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
     }
 
     private final SeaController.Stub binder = new SeaController.Stub() {

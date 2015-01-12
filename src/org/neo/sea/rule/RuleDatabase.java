@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.rule;
+package org.neo.sea.rule;
 
 import android.content.ContentValues;
 import android.content.Context;

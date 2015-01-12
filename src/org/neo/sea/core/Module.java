@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.core;
+package org.neo.sea.core;
 
 public abstract class Module {
     public abstract String name();

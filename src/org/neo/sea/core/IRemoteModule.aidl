@@ -1,4 +1,4 @@
-package org.directcode.neo.sea;
+package org.neo.sea.core;
 
 interface IRemoteModule {
     String name();

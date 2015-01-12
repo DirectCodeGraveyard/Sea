@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.core;
+package org.neo.sea.core;
 
 import android.util.Log;
 

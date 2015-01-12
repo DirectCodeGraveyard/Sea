@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.rule;
+package org.neo.sea.rule;
 
 public class Rule {
     private final int id;

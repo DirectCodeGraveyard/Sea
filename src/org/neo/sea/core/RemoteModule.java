@@ -1,4 +1,4 @@
-package org.directcode.neo.sea.core;
+package org.neo.sea.core;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-
-import org.directcode.neo.sea.IRemoteModule;
 
 import java.util.ArrayList;
 import java.util.List;
