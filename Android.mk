@@ -12,3 +12,6 @@ LOCAL_SDK_VERSION := current
 LOCAL_PACKAGE_NAME := Sea
 
 include $(BUILD_PACKAGE)
+include $(BUILD_MULTI_PREBUILT)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := libs/android-support-v7-recyclerview.jar

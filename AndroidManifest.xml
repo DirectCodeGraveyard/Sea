@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.neo.sea" >
+    package="org.neo.sea">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -22,12 +22,12 @@
         android:name=".core.SeaApplication"
         android:allowBackup="true"
         android:icon="@android:drawable/ic_menu_more"
-        android:label="@string/app_name" >
+        android:label="@string/app_name">
         <activity
             android:name=".ui.ModuleToggleActivity"
             android:enabled="true"
             android:exported="true"
-            android:label="Sea Module Toggler" >
+            android:label="@string/module_toggler_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -37,19 +37,25 @@
         <activity
             android:name=".ui.FirstRunActivity"
             android:label="@string/title_activity_first_run"
-            android:theme="@android:style/Theme.Material.NoActionBar">
-        </activity>
+            android:theme="@android:style/Theme.Material.NoActionBar"/>
 
-        <activity android:name=".ui.RuleManagerActivity" android:label="Sea Rule Manager" android:theme="@android:style/Theme.Material" />
+        <activity
+            android:name=".ui.RuleManagerActivity"
+            android:description="@string/rule_manager_desc"
+            android:label="@string/rule_manager_label"
+            android:theme="@android:style/Theme.Material" />
 
         <service
             android:name=".core.SeaService"
-            android:enabled="true" />
+            android:description="@string/sea_service_desc"
+            android:enabled="true"
+            android:label="@string/sea_service_label" />
 
         <receiver
             android:name=".core.BootReceiver"
+            android:description="@string/boot_receiver_desc"
             android:enabled="true"
-            android:label="StartSeaOnBoot" >
+            android:label="@string/boot_receiver_label">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -57,8 +63,9 @@
 
         <receiver
             android:name=".core.PackageReceiver"
+            android:description="@string/package_receiver_desc"
             android:enabled="true"
-            android:label="PackageReceiver" >
+            android:label="@string/package_receiver_label">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />

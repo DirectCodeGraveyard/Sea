@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import org.neo.sea.R;
+
 public class FirstRunActivity extends Activity {
 
     @Override

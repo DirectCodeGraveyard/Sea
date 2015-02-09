@@ -8,5 +8,15 @@
     <string name="welcome_title">Welcome to Sea</string>
     <string name="welcome_paragraph">Sea allows you to customize Android to your heart\'s content</string>
     <string name="welcome_button">Let\'s Get Started</string>
+    <string name="heart_img_desc">Heart</string>
+    <string name="module_toggler_label">Sea Module Toggler</string>
+    <string name="boot_receiver_label">Sea Boot Receiver</string>
+    <string name="boot_receiver_desc">Starts Sea on Boot</string>
+    <string name="sea_service_desc">Background Services for Sea</string>
+    <string name="sea_service_label">Sea Service</string>
+    <string name="package_receiver_label">Package Receiver</string>
+    <string name="package_receiver_desc">Manages Remote Modules</string>
+    <string name="rule_manager_label">Sea Rule Manager</string>
+    <string name="rule_manager_desc">Manages Sea Rules</string>
 
 </resources>

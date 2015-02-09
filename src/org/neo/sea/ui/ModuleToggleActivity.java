@@ -12,23 +12,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.neo.sea.core.SeaLog;
+import org.neo.sea.R;
+import org.neo.sea.core.SeaController;
 import org.neo.sea.core.SeaService;
-
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ModuleToggleActivity extends Activity {
     private SeaController controller;
     private ServiceConnection connection;
-    private Timer timer;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +42,14 @@ public class ModuleToggleActivity extends Activity {
             editor.apply();
         }
 
-        final ProgressDialog loadingDialog = ProgressDialog.show(this, "Connecting...", "Controller is connecting to the Sea Service.");
+        final ProgressDialog loadingDialog = ProgressDialog.show(this, "Connecting...", "Module Manager is connecting to Sea.");
 
         connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 loadingDialog.hide();
                 controller = SeaController.Stub.asInterface(iBinder);
-                reload();
+                recyclerView.setAdapter(new ModuleAdapter());
             }
 
             @Override
@@ -59,7 +58,7 @@ public class ModuleToggleActivity extends Activity {
 
                 dialog.setTitle("Disconnected from Sea");
                 TextView content = new TextView(getApplicationContext());
-                content.setText("Sea Controller was disconnected from the Sea Service!");
+                content.setText("Module Manager was disconnected from Sea!");
                 dialog.setContentView(content);
                 dialog.setCancelable(false);
 
@@ -80,69 +79,76 @@ public class ModuleToggleActivity extends Activity {
 
         setContentView(R.layout.module_toggle);
 
-        timer = new Timer("Refresher");
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        reload();
-                    }
-                });
-            }
-        }, 5000, 5000);
-    }
+        recyclerView = new RecyclerView(this);
 
-    private void reload() {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.controller_layout);
-        layout.removeAllViewsInLayout();
-
-        ScrollView view = new ScrollView(this);
-
-        try {
-            final List<String> modules = controller.modules();
-
-            for (final String moduleName : modules) {
-                boolean loaded = controller.isLoaded(moduleName);
-
-                CheckBox box = new CheckBox(getApplicationContext());
-
-                box.setText(moduleName);
-
-                if (loaded) {
-                    box.setChecked(true);
-                }
-
-                box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                        try {
-                            if (checked && !controller.isLoaded(moduleName)) {
-                                controller.load(moduleName);
-                            } else if (!checked && controller.isLoaded(moduleName)) {
-                                controller.unload(moduleName);
-                            }
-                        } catch (RemoteException e) {
-                            SeaLog.error("Failed to handle checkbox change!", e);
-                        }
-                    }
-                });
-
-                view.addView(box);
-            }
-
-        } catch (Exception e) {
-            SeaLog.error("Failed to initialize controller!", e);
-        }
-
-        layout.addView(view);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.controller_layout);
+        linearLayout.addView(recyclerView, linearLayout.getWidth(), linearLayout.getHeight());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
         unbindService(connection);
+    }
+
+    public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ViewHolder> {
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public CardView view;
+
+            public ViewHolder(CardView view) {
+                super(view);
+                this.view = view;
+            }
+        }
+
+        @Override
+        public ModuleAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            return new ViewHolder(new CardView(ModuleToggleActivity.this));
+        }
+
+        @Override
+        public void onBindViewHolder(ModuleAdapter.ViewHolder viewHolder, int i) {
+            final String name;
+            boolean loaded;
+            try {
+                name = controller.modules().get(i);
+                loaded = controller.isLoaded(name);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            TextView nameView = new TextView(ModuleToggleActivity.this);
+            nameView.setTextSize(36);
+            nameView.setText(name);
+            CheckBox box = new CheckBox(ModuleToggleActivity.this);
+            box.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (controller.isLoaded(name)) {
+                            controller.unload(name);
+                        } else {
+                            controller.load(name);
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            box.setChecked(loaded);
+            viewHolder.view.addView(nameView);
+            viewHolder.view.addView(box);
+        }
+
+        @Override
+        public int getItemCount() {
+            try {
+                return controller.modules().size();
+            } catch (RemoteException e) {
+                return 0;
+            }
+        }
     }
 }
